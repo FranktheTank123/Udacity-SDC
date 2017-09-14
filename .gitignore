@@ -1,0 +1,35 @@
+# Python
+/env/
+/build/
+*.py[co]
+*.egg*
+.cache
+.DS_Store
+
+# Emacs
+*~
+.\#*
+\#*\#
+
+# Mac
+.DS_Store
+
+# Pycharm
+/.idea/
+
+.coverage
+cover
+
+coverage.xml
+jenkins.xml
+junit.xml
+.ipynb_checkpoints
+
+*.png
+*.aux
+
+.Rhistory
+env/
+*.tmp
+
+CarND-Term1-Starter-Kit-Test/
