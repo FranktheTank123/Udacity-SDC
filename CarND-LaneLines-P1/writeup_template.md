@@ -48,7 +48,7 @@ In order to draw a single line on the left and right lanes, I modified the `draw
 * After we got the slope for each lane, we use it to extend **the bottom line** till the bottom and till the top of region of interest.
 * Moreover, we introduce a smoothing parameter `exp_w=0.2`, which to make sure the currently slope not being too far away from the slope in the last frame. This is implemented using a `global dictionary`. 
 
-![alt text][https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-LaneLines-P1/test_images_output/solidWhiteCurve.jpg_modified.jpg]
+![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-LaneLines-P1/test_images_output/solidWhiteCurve.jpg_modified.jpg)
 
 
 ### 2. Identify potential shortcomings with your current pipeline
