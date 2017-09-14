@@ -28,12 +28,12 @@ My pipeline consisted of 6 steps.
 4. Define and mask region of interest via `draw_roi_lines` and `region_of_interest`
 5. Hough transform the masked image with pre-specified parameters via `hough_lines`.
 
-    ```python
-    rho = 2 # distance resolution in pixels of the Hough grid
-    theta = np.pi/180 # angular resolution in radians of the Hough grid
-    threshold = 30     # minimum number of votes (intersections in Hough grid cell)
-    min_line_length = 5 #minimum number of pixels making up a line
-    max_line_gap = 1  # maximum gap in pixels between connectable line segments
+```python
+rho = 2 # distance resolution in pixels of the Hough grid
+theta = np.pi/180 # angular resolution in radians of the Hough grid
+threshold = 30     # minimum number of votes (intersections in Hough grid cell)
+min_line_length = 5 #minimum number of pixels making up a line
+max_line_gap = 1  # maximum gap in pixels between connectable line segments
 ```
 
 6. Drawing lines on the original image via `weighted_img`
