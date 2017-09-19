@@ -126,11 +126,12 @@ If an iterative approach was chosen:
 
 Here are five German traffic signs that I found on the web:
 
-![alt text][image4]
-![alt text][image5] 
-![alt text][image6] 
-![alt text][image7] 
-![alt text][image8]
+![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Traffic-Sign-Classifier-Project/new_images/SchoolTrafficSigns.jpg)
+![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Traffic-Sign-Classifier-Project/new_images/SpeedLimit20_2.jpg)
+![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Traffic-Sign-Classifier-Project/new_images/SpeedLimit30_2.jpg) 
+![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Traffic-Sign-Classifier-Project/new_images/SpeedLimit60.jpg) 
+![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Traffic-Sign-Classifier-Project/new_images/SpeedLimit60_2.jpg)
+![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Traffic-Sign-Classifier-Project/new_images/SpeedLimit80.jpg)
 
 The first image might be difficult to classify because ...
 
@@ -138,16 +139,17 @@ The first image might be difficult to classify because ...
 
 Here are the results of the prediction:
 
-| Image			        |     Prediction	        					| 
+| Image	| Prediction| 
 |:---------------------:|:---------------------------------------------:| 
-| Stop Sign      		| Stop sign   									| 
-| U-turn     			| U-turn 										|
-| Yield					| Yield											|
-| 100 km/h	      		| Bumpy Road					 				|
-| Slippery Road			| Slippery Road      							|
+| Speed limit (30km/h)      		| Go straight or right	| 
+| Speed limit (20km/h)| Dangerous curve to the right |
+| Children crossing	| Children crossing|
+| Speed limit (60km/h)	| Speed limit (60km/h)|
+| Speed limit (60km/h) | Speed limit (50km/h)|
+|Speed limit (80km/h)|Speed limit (80km/h)|
 
 
-The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. This compares favorably to the accuracy on the test set of ...
+The model was able to correctly guess 3 of the 6 traffic signs, which gives an accuracy of 50%. 
 
 #### 3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
 
