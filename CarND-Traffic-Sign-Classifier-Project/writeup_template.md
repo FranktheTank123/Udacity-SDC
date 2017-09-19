@@ -126,14 +126,13 @@ If an iterative approach was chosen:
 
 Here are five German traffic signs that I found on the web:
 
-![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Traffic-Sign-Classifier-Project/new_images/SchoolTrafficSigns.jpg)
-![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Traffic-Sign-Classifier-Project/new_images/SpeedLimit20_2.jpg)
-![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Traffic-Sign-Classifier-Project/new_images/SpeedLimit30_2.jpg) 
-![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Traffic-Sign-Classifier-Project/new_images/SpeedLimit60.jpg) 
-![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Traffic-Sign-Classifier-Project/new_images/SpeedLimit60_2.jpg)
-![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Traffic-Sign-Classifier-Project/new_images/SpeedLimit80.jpg)
+![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Traffic-Sign-Classifier-Project/new_images/Double_curve.png)
+![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Traffic-Sign-Classifier-Project/new_images/SpeedLimit30.png)
+![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Traffic-Sign-Classifier-Project/new_images/SpeedLimit60.png) 
+![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Traffic-Sign-Classifier-Project/new_images/SpeedLimit80.png) 
+![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Traffic-Sign-Classifier-Project/new_images/slippery_road.png)
 
-The first image might be difficult to classify because ...
+Personally I believe numbers are hard to identify because they are not rotation-invariant. 6 and 9 are different, but hard for CNN to tell if there are too much weight sharing. `Double curve` and `slippery road` are also hard to learn because there are less dataset in the training, which means the model is less familiar with these picture.
 
 #### 2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
 
@@ -141,15 +140,13 @@ Here are the results of the prediction:
 
 | Image	| Prediction| 
 |:---------------------:|:---------------------------------------------:| 
-| Speed limit (30km/h)      		| Go straight or right	| 
-| Speed limit (20km/h)| Dangerous curve to the right |
-| Children crossing	| Children crossing|
-| Speed limit (60km/h)	| Speed limit (60km/h)|
-| Speed limit (60km/h) | Speed limit (50km/h)|
-|Speed limit (80km/h)|Speed limit (80km/h)|
+| Speed limit (60km/h)| Speed limit (60km/h)| 
+|Speed limit (30km/h)| Keep right |
+| Double curve	| Right-of-way at the next intersection|
+| Speed limit (80km/h)	| Keep right|
+| Slippery road | Slippery road|
 
-
-The model was able to correctly guess 3 of the 6 traffic signs, which gives an accuracy of 50%. 
+The model was able to correctly guess 2 of the 5 traffic signs, which gives an accuracy of 40%. The accuracy is far less than the test accuracies.  
 
 #### 3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
 
