@@ -25,7 +25,6 @@ jenkins.xml
 junit.xml
 .ipynb_checkpoints
 
-*.png
 *.aux
 
 .Rhistory
