@@ -63,25 +63,31 @@ As a last step, I normalized the image data using `(pixel - 128)/ 128` approxima
 
 My final model consisted of the following layers:
 
-| Layer         		|     Description	        					| 
+| Layer         		|     Description| 
 |:---------------------:|:---------------------------------------------:| 
-| Input         		| 32x32x1 RGB image   							| 
-| Convolution 5x5     	| 10 filters, 1x1 stride, `VALID` padding, outputs 28x28x10 	|
+| Input  | 32x32x1 RGB image | 
+| Convolution 3x3     	| 20 filters, 1x1 stride, `VALID` padding, outputs 30x30x20 	|
 | RELU | |
-| Max pooling	| 3x3 kernel, 1x1 stride,  outputs 26x26x10 |
-| Convolution 3x3     	| 15 filters, 1x1 stride, `VALID` padding, outputs 24x24x15 	|
+| Dropout | keep_prob = 0.5|
+| Max pooling	| 3x3 kernel, 1x1 stride,  outputs 28x28x20 |
+| Convolution 3x3     	| 50 filters, 1x1 stride, `VALID` padding, outputs 26x26x50 	|
 | RELU | |
-| Max pooling	| 2x2 kernel, 2x2 stride,  outputs 12x12x15 |
-| Convolution 3x3     	| 30 filters, 1x1 stride, `VALID` padding, outputs 10x10x30 	|
+| Dropout | keep_prob = 0.5|
+| Max pooling	| 2x2 kernel, 2x2 stride,  outputs 13x13x50 |
+| Convolution 4x4     	| 100 filters, 1x1 stride, `VALID` padding, outputs 10x10x100 	|
 | RELU | |
-| Max pooling	| 2x2 kernel, 2x2 stride,  outputs 5x5x30 |
-|Flatten Layer| outputs 750x1|
-| Fully connected		| outputs 400x1|
+| Dropout | keep_prob = 0.5|
+| Max pooling	| 2x2 kernel, 2x2 stride,  outputs 5x5x100 |
+|Flatten Layer| outputs 2500x1|
+| Fully connected		| outputs 1024x1|
 | RELU | |
-| Fully connected		| outputs 120x1|
+| Dropout | keep_prob = 0.5|
+| Fully connected		| outputs 521x1|
 | RELU | |
-| Fully connected		| outputs 84x1|
+| Dropout | keep_prob = 0.5|
+| Fully connected		| outputs 128x1|
 | RELU | |
+| Dropout | keep_prob = 0.5|
 | Fully connected		| outputs 43x1|
 |`softmax_cross_entropy_with_logits`||
  
@@ -94,14 +100,15 @@ To train the model:
 1. **EPOCH**: I increase the EPOCH number to 50
 3. **Learning Rate**: Learning rate was optimal at 0.001. Any change from here degraded the performance.
 4. **Optimizer**: I tried RMSProp and Adam, and Adam seems better.
+5. **Regularization**: I used dropout = 0.5
 
 #### 4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
 
 My final model results were:
 
-* training set accuracy of 1
-* validation set accuracy of 96.9% 
-* test set accuracy of 95.6%
+* training set accuracy of 99.3%
+* validation set accuracy of 95.1% 
+* test set accuracy of 93.7%
 
 If an iterative approach was chosen:
 
@@ -115,7 +122,7 @@ If an iterative approach was chosen:
     * I tried to increase the batch size to 256, 512 etc. but result underperformed. Therefore, I decided to keep batch size as 128.   
     * I tried to change learning rate from 0.0001 to 0.01, but 0.001 seems to be the best.
     * I tried Adam and RMSProp, and Adam seems better.
-    * Didn't try dropout as the validation performance was pretty good without dropout.
+    * I also tried droupout with keep_prob = 0.5 to reduce overfitting of the bigger net.
 * What are some of the important design choices and why were they chosen? For example, why might a convolution layer work well with this problem? How might a dropout layer help with creating a successful model?
     * CNN works very well for image classification, as the shared weights will reduce parameters space. Moreover, it doesn't matter whether there was a shift/rotation in the image.
  
@@ -143,27 +150,14 @@ Here are the results of the prediction:
 | Speed limit (60km/h)| Speed limit (60km/h)| 
 |Speed limit (30km/h)| Keep right |
 | Double curve	| Right-of-way at the next intersection|
-| Speed limit (80km/h)	| Keep right|
+| Speed limit (80km/h)	| Speed limit (80km/h) |
 | Slippery road | Slippery road|
 
-The model was able to correctly guess 2 of the 5 traffic signs, which gives an accuracy of 40%. The accuracy is far less than the test accuracies.  
+The model was able to correctly guess 3 of the 5 traffic signs, which gives an accuracy of 60%. The accuracy is far less than the test accuracies.  
 
 #### 3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
 
-The code for making predictions on my final model is located in the 11th cell of the Ipython notebook.
-
-For the first image, the model is relatively sure that this is a stop sign (probability of 0.6), and the image does contain a stop sign. The top five soft max probabilities were
-
-| Probability         	|     Prediction	        					| 
-|:---------------------:|:---------------------------------------------:| 
-| .60         			| Stop sign   									| 
-| .20     				| U-turn 										|
-| .05					| Yield											|
-| .04	      			| Bumpy Road					 				|
-| .01				    | Slippery Road      							|
-
-
-For the second image ... 
+![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Traffic-Sign-Classifier-Project/solution/results.png)
 
 ### (Optional) Visualizing the Neural Network (See Step 4 of the Ipython notebook for more details)
 #### 1. Discuss the visual output of your trained network's feature maps. What characteristics did the neural network use to make classifications?
