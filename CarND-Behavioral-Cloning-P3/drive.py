@@ -2,6 +2,7 @@ import argparse
 import base64
 from datetime import datetime
 import os
+import cv2
 import shutil
 
 import numpy as np
@@ -21,6 +22,23 @@ app = Flask(__name__)
 model = None
 prev_image_array = None
 
+
+def preprocess_image(img):
+    '''
+    Method for preprocessing images: this method is the same used in drive.py, except this version uses
+    BGR to YUV and drive.py uses RGB to YUV (due to using cv2 to read the image here, where drive.py images are 
+    received in RGB)
+    '''
+    # original shape: 160x320x3, input shape for neural net: 66x200x3
+    new_img = img[50:140,:,:]
+    # apply subtle blur
+    new_img = cv2.GaussianBlur(new_img, (3,3), 0)
+    # scale to 66x200x3 (same as nVidia)
+    new_img = cv2.resize(new_img,(200, 66), interpolation = cv2.INTER_AREA)
+    # convert to YUV color space (as nVidia paper suggests)
+    ####### REMEMBER: IMAGES FROM SIMULATOR COME IN RGB!!!!!! #######
+    new_img = cv2.cvtColor(new_img, cv2.COLOR_RGB2YUV)
+    return new_img
 
 class SimplePIController:
     def __init__(self, Kp, Ki):
@@ -60,7 +78,7 @@ def telemetry(sid, data):
         # The current image from the center camera of the car
         imgString = data["image"]
         image = Image.open(BytesIO(base64.b64decode(imgString)))
-        image_array = np.asarray(image)
+        image_array = preprocess_image(np.asarray(image)) # additional preprocessing
         steering_angle = float(model.predict(image_array[None, :, :, :], batch_size=1))
 
         throttle = controller.update(float(speed))
