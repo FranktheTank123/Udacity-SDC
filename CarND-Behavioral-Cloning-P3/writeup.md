@@ -43,7 +43,7 @@ The model.py file contains the code for training and saving the convolution neur
 
 The starting point is the [nVidia model](https://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf) with the following architecture, with all activation function being `ReLu`. (`model.py line 159-199`)
 
-![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Behavioral-Cloning-P3/nVidia_model.png)
+![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Behavioral-Cloning-P3/examples/nVidia_model.png)
 
 
 #### 2. Attempts to reduce overfitting in the model
@@ -85,11 +85,11 @@ To augment training data, I use random distortion on top of the images. I also u
 
 The final step was to run the simulator to see how well the car was driving around track one. There were a few spots where the vehicle fell off the track, such as the left turn after the bridge. It seems the car just go straight into the side track. To improve the driving behavior in these cases, I analyze the training set. I notice that most of the data's corresponding angle are centered at `0`, which provide limited information on how to behave when the car are not on the center of the track.
 
-![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Behavioral-Cloning-P3/data_old.png)
+![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Behavioral-Cloning-P3/examples/data_old.png)
 
 I re-weighted the training set by dropping and achieved a better distributed histogram:
 
-![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Behavioral-Cloning-P3/data_new.png)
+![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Behavioral-Cloning-P3/examples/data_new.png)
 
 At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road.
 
@@ -110,19 +110,20 @@ The final model architecture (`model.py lines 159-199`) consisted of a convoluti
 
 To capture good driving behavior, I first recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to get back to the middle of the lane when they are about to go outside of the trail. These images show what a recovery looks like:
 
-![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Behavioral-Cloning-P3/left_2017_09_22_10_48_01_917.jpg)
-![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Behavioral-Cloning-P3/right_2017_09_22_10_47_56_544.jpg)
+![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Behavioral-Cloning-P3/examples/left_2017_09_22_10_48_01_917.jpg)
+![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Behavioral-Cloning-P3/examples/right_2017_09_22_10_47_56_544.jpg)
 
 
 To augment the data sat, I also flipped images and angles thinking that this would help the model to get more dataset to train. Moreover, I also crop and distort the image to make the model less overfitting:
 
-![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Behavioral-Cloning-P3/data_pre_crop.png)
-![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Behavioral-Cloning-P3/data_post_crop.png)
+![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Behavioral-Cloning-P3/examples/data_pre_crop.png)
+![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Behavioral-Cloning-P3/examples/data_post_crop.png)
 
 Later I re-weight the sample so that the data with high angle values in absolute value will get more weights during the training.
 
 I finally randomly shuffled the data set and put 5% of the data into a validation set. 
 
-I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was Z as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.
+I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was 150 as evidenced by the loss function below. I used an adam optimizer so that manually training the learning rate wasn't necessary.
 
+![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Behavioral-Cloning-P3/examples/loss.png)
 
