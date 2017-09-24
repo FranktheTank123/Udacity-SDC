@@ -83,13 +83,27 @@ To combat the overfitting, I think I should not only modify the model architectu
 
 To augment training data, I use random distortion on top of the images. I also use the left/right camera with `+/- 0.25` correction. Moreover, I randomly vertically revert the pictures.
 
-The final step was to run the simulator to see how well the car was driving around track one. There were a few spots where the vehicle fell off the track, such as the left turn after the bridge. It seems the car just go straight into the side track. To improve the driving behavior in these cases, I analyze the training set. I notice that most of the data are 
+The final step was to run the simulator to see how well the car was driving around track one. There were a few spots where the vehicle fell off the track, such as the left turn after the bridge. It seems the car just go straight into the side track. To improve the driving behavior in these cases, I analyze the training set. I notice that most of the data's corresponding angle are centered at `0`, which provide limited information on how to behave when the car are not on the center of the track.
+
+![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Behavioral-Cloning-P3/data_old.png)
+
+I re-weighted the training set by dropping and achieved a better distributed histogram:
+
+![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Behavioral-Cloning-P3/data_new.png)
 
 At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road.
 
 #### 2. Final Model Architecture
 
-The final model architecture (`model.py lines 159-199`) consisted of a convolution neural network with the following layers and layer sizes ...
+The final model architecture (`model.py lines 159-199`) consisted of a convolution neural network:
+
+1. Input of size (66, 200, 3) (by resizing the image after cropping & distorting.)
+2. Normalization by `x / 127.5 -1`.
+3. Three 5x5 convolution layers (output depth 24, 36, and 48), each with 2x2 stride, `valid` padding, `ReLu` activation after each Conv layer, `W_regularizer` being `l2(0.001)`.
+4. Two 3x3 convolution layers (output depth 64, and 64), each with 1x1 stride, `valid` padding, `ReLu` activation after each Conv layer, `W_regularizer` being `l2(0.001)`.
+5. Flatten layer
+6. Three fully connected layers (depth 100, 50, 10), Relu activation, `W_regularizer` being `l2(0.001)`.
+
 
 
 #### 3. Creation of the Training Set & Training Process

@@ -128,16 +128,16 @@ def random_distort(img):
     new_img = cv2.warpPerspective(new_img,M,(w,h), borderMode=cv2.BORDER_REPLICATE)
     return new_img.astype(np.uint8)
 
-def generator(image_paths, angles, batch_size=32, **kwargs):
+def generator(image_paths, angles, batch_size=32, validation_flag=False):
     num_samples = len(image_paths)
     while 1: # Loop forever so the generator never terminates
         image_paths, angles = shuffle(image_paths, angles)
         for offset in range(0, num_samples, batch_size):
-            batch_samples = (image_paths[offset:offset+batch_size], angles[offset:offset+batch_size])
-
+            batch_samples_path = image_paths[offset:offset+batch_size]
+            batch_samples_angles = angles[offset:offset+batch_size]
             images_batch = []
             angles_batch = []
-            for image_path, angle in batch_samples:
+            for image_path, angle in zip(batch_samples_path, batch_samples_angles):
 
                 img = cv2.imread(os.path.join(DATA_PATH, image_path))
                 img = preprocess_image(img)
@@ -179,7 +179,7 @@ def get_model():
     # Add a flatten layer
     model.add(Flatten())
 
-    # Add three fully connected layers (depth 100, 50, 10), tanh activation (and dropouts)
+    # Add three fully connected layers (depth 100, 50, 10), Relu activation
     model.add(Dense(100, W_regularizer=l2(0.001)))
     model.add(Activation('relu'))
     #model.add(Dropout(0.50))
@@ -218,7 +218,7 @@ def main(correction, batch_size, nb_epoch):
 
     image_paths_train, image_paths_test, angles_train, angles_test = train_test_split(image_paths, angles, test_size=0.05, random_state=1111)
     train_gen = generator(image_paths_train, angles_train, batch_size=batch_size)
-    val_gen = generator(image_paths_test, angles_test, batch_size=batch_size)
+    val_gen = generator(image_paths_test, angles_test, batch_size=batch_size, validation_flag=True)
 
     model = get_model()
 
