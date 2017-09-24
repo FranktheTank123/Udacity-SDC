@@ -164,30 +164,30 @@ def get_model():
 
     # Add three 5x5 convolution layers (output depth 24, 36, and 48), each with 2x2 stride
     model.add(Convolution2D(24, 5, 5, subsample=(2, 2), border_mode='valid', W_regularizer=l2(0.001)))
-    model.add(ELU())
+    model.add(Activation('relu'))
     model.add(Convolution2D(36, 5, 5, subsample=(2, 2), border_mode='valid', W_regularizer=l2(0.001)))
-    model.add(ELU())
+    model.add(Activation('relu'))
     model.add(Convolution2D(48, 5, 5, subsample=(2, 2), border_mode='valid', W_regularizer=l2(0.001)))
-    model.add(ELU())
+    model.add(Activation('relu'))
 
     # Add two 3x3 convolution layers (output depth 64, and 64)
     model.add(Convolution2D(64, 3, 3, border_mode='valid', W_regularizer=l2(0.001)))
-    model.add(ELU())
+    model.add(Activation('relu'))
     model.add(Convolution2D(64, 3, 3, border_mode='valid', W_regularizer=l2(0.001)))
-    model.add(ELU())
+    model.add(Activation('relu'))
 
     # Add a flatten layer
     model.add(Flatten())
 
     # Add three fully connected layers (depth 100, 50, 10), tanh activation (and dropouts)
     model.add(Dense(100, W_regularizer=l2(0.001)))
-    model.add(ELU())
+    model.add(Activation('relu'))
     #model.add(Dropout(0.50))
     model.add(Dense(50, W_regularizer=l2(0.001)))
-    model.add(ELU())
+    model.add(Activation('relu'))
     #model.add(Dropout(0.50))
     model.add(Dense(10, W_regularizer=l2(0.001)))
-    model.add(ELU())
+    model.add(Activation('relu'))
     #model.add(Dropout(0.50))
 
     # Add a fully connected output layer
