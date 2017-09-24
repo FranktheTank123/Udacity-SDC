@@ -108,25 +108,20 @@ The final model architecture (`model.py lines 159-199`) consisted of a convoluti
 
 #### 3. Creation of the Training Set & Training Process
 
-To capture good driving behavior, I first recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to get back to the middle of the lane when they are about to go outside of the trail. These images show what a recovery looks like starting from ... :
+To capture good driving behavior, I first recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to get back to the middle of the lane when they are about to go outside of the trail. These images show what a recovery looks like:
 
-![alt text][image3]
-![alt text][image4]
-![alt text][image5]
-
-Then I repeated this process on track two in order to get more data points.
-
-To augment the data sat, I also flipped images and angles thinking that this would ... For example, here is an image that has then been flipped:
-
-![alt text][image6]
-![alt text][image7]
-
-Etc ....
-
-After the collection process, I had X number of data points. I then preprocessed this data by ...
+![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Behavioral-Cloning-P3/left_2017_09_22_10_48_01_917.jpg)
+![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Behavioral-Cloning-P3/right_2017_09_22_10_47_56_544.jpg)
 
 
-I finally randomly shuffled the data set and put Y% of the data into a validation set. 
+To augment the data sat, I also flipped images and angles thinking that this would help the model to get more dataset to train. Moreover, I also crop and distort the image to make the model less overfitting:
+
+![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Behavioral-Cloning-P3/data_pre_crop.png)
+![alt text](https://github.com/FranktheTank123/Udacity-SDC/blob/master/CarND-Behavioral-Cloning-P3/data_post_crop.png)
+
+Later I re-weight the sample so that the data with high angle values in absolute value will get more weights during the training.
+
+I finally randomly shuffled the data set and put 5% of the data into a validation set. 
 
 I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was Z as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.
 

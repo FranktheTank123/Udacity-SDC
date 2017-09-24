@@ -195,7 +195,7 @@ def get_model():
 
     # Compile and train the model, 
     #model.compile('adam', 'mean_squared_error')
-    model.compile(optimizer=Adam(lr=1e-4), loss='mse')
+    model.compile(optimizer=Adam(), loss='mse')
     return model
 
 def plot_error(history_object):
