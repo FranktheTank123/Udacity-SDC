@@ -70,22 +70,8 @@ I used a combination of HLS color and gradient thresholds to generate a binary i
 
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
-The code for my perspective transform includes a function called `warper()`, which appears in lines 1 through 8 in the file `example.py` (output_images/examples/example.py) (or, for example, in the 3rd code cell of the IPython notebook).  The `warper()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
+The code for my perspective transform includes a function called `warper()`, which appears in the ipython notebook.  The `warper()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
 
-```python
-src = np.float32(
-    [[(img_size[0] / 2) - 55, img_size[1] / 2 + 100],
-    [((img_size[0] / 6) - 10), img_size[1]],
-    [(img_size[0] * 5 / 6) + 60, img_size[1]],
-    [(img_size[0] / 2 + 55), img_size[1] / 2 + 100]])
-dst = np.float32(
-    [[(img_size[0] / 4), 0],
-    [(img_size[0] / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), 0]])
-```
-
-This resulted in the following source and destination points:
 
 | Source        | Destination   | 
 |:-------------:|:-------------:| 
@@ -101,7 +87,21 @@ I verified that my perspective transform was working as expected by drawing the 
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
+Lane lines are detected in the function `detect_lane_lines` in the ipython nobebook. I used the polynomial fit method from the lectures to detect the lane lines.
+
+Here are the steps I take for detecting lane lines:
+
+* Parameters:
+    *   Num windows = 9
+    *   Minpix = 50
+    *   Margin = 50
+* Get the histogram of the bottom half of the image and obtain the peaks for left and right.
+* Use the peaks pixels on the left and right of the image as a starting point for lane search.
+* Obtain all the non-zero pixels within the margin (used 50) of the center pixels.
+* For next window, if you obtain more than minpix no of pixels for either left or right lane, use the mean of those pixels as a starting point for center of next window.
+* Use the non zero pixels obtained on the left and right to fit the left and right quadratic curves respectively.
+
+When we process the video, I will save the frame. For the next image, I do a targeted search based on the lane lines in previous frame. For search of center pixels in each window, I use the polynomial coefficients from previous frame to obtain the center pixel for new frame. Rest of the procedure remains the same as above.
 
 ![alt text][image5]
 
