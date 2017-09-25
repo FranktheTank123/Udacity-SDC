@@ -24,10 +24,11 @@ The goals / steps of this project are the following:
 [image3]: ./output_images/color_binary.jpg "Binary Example"
 [image4]: ./output_images/perspective_1.jpg "Warp Example1"
 [image41]: ./output_images/perspective_2.jpg "Warp Example2"
-[image5]: ./examples/color_fit_lines.jpg "Fit Visual"
+[image51]: ./output_images/source_img.png "Fit Visual"
+[image52]: ./output_images/perspective.png "Fit Visual2"
+[image53]: ./output_images/detected.png "Fit Visual3"
+[image54]: ./output_images/lanes.png "Fit Visual4"
 [image6]: ./output_images/test1.png "Output1"
-[image61]: ./output_images/test2.png "Output2"
-[video1]: ./project_video.mp4 "Video"
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
 
@@ -104,7 +105,10 @@ Here are the steps I take for detecting lane lines:
 
 When we process the video, I will save the frame. For the next image, I do a targeted search based on the lane lines in previous frame. For search of center pixels in each window, I use the polynomial coefficients from previous frame to obtain the center pixel for new frame. Rest of the procedure remains the same as above.
 
-![alt text][image5]
+![alt text][image51]
+![alt text][image52]
+![alt text][image53]
+![alt text][image54]
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
@@ -112,10 +116,9 @@ Please refer to the `get_radius_of_curvature` function defined the ipython noteb
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-I implemented the whole pipeline in the `Line` class in the ipython notebook. Here are examples of my result on a test image:
+I implemented the whole pipeline in the `Line` class in the `./codes/Line.py`. Here is an example of my result on a test image:
 
 ![alt text][image6]
-![alt text][image61]
 
 ---
 
