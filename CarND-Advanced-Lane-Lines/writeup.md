@@ -21,8 +21,9 @@ The goals / steps of this project are the following:
 
 [image1]: ./output_images/Undistorted.jpg "Undistorted"
 [image2]: ./output_images/Undistorted_test.jpg "Undistorted_test"
-[image3]: ./examples/binary_combo_example.jpg "Binary Example"
-[image4]: ./examples/warped_straight_lines.jpg "Warp Example"
+[image3]: ./output_images/color_binary.jpg "Binary Example"
+[image4]: ./output_images/perspective_1.jpg "Warp Example1"
+[image41]: ./output_images/perspective_2.jpg "Warp Example2"
 [image5]: ./examples/color_fit_lines.jpg "Fit Visual"
 [image6]: ./examples/example_output.jpg "Output"
 [video1]: ./project_video.mp4 "Video"
@@ -60,7 +61,10 @@ To demonstrate this step, I will describe how I apply the distortion correction 
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
-I used a combination of color and gradient thresholds to generate a binary image (thresholding steps at lines # through # in `another_file.py`).  Here's an example of my output for this step.  (note: this is not actually from one of the test images)
+I used a combination of HLS color and gradient thresholds to generate a binary image (refer to the `pipeline` function in the notebook).  Here's an example of my output for this step. For thresholds, I tested and finally chose define: 
+
+* Sobel X threshold: `sx_thresh=(30,150)`
+* HLS's S threshold: `s_thresh=(170, 255)`
 
 ![alt text][image3]
 
@@ -93,6 +97,7 @@ This resulted in the following source and destination points:
 I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
 
 ![alt text][image4]
+![alt text][image41]
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
