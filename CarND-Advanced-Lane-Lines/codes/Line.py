@@ -88,7 +88,7 @@ class Line():
 
         self.SRC_COORDS = np.float32([(203,720),(1127,720),(695,460),(585,460)])
         self.DEST_COORDS = np.float32([(320,720),(960,720),(960,0),(320,0)])
-        self.margin = 50
+
 
         ## Smoothing parameters below
         # was the line detected in the last iteration?
@@ -151,6 +151,7 @@ class Line():
         nwindows = 9
         window_height = np.int(binary_warped.shape[0]/nwindows)
         minpix = 50
+        margin = 50
         left_lane_inds = []
         right_lane_inds = []
         
@@ -168,10 +169,10 @@ class Line():
                 win_y_high = binary_warped.shape[0] - window*window_height
                 leftx_current = self.current_fit_left[0]*(win_y_high -1)**2 + self.current_fit_left[1]*(win_y_high -1) + self.current_fit_left[2]
                 rightx_current = self.current_fit_right[0]*(win_y_high -1)**2 + self.current_fit_right[1]*(win_y_high -1) + self.current_fit_right[2]
-                win_xleft_low = leftx_current - self.margin
-                win_xleft_high = leftx_current + self.margin
-                win_xright_low = rightx_current - self.margin
-                win_xright_high = rightx_current + self.margin
+                win_xleft_low = leftx_current - margin
+                win_xleft_high = leftx_current + margin
+                win_xright_low = rightx_current - margin
+                win_xright_high = rightx_current + margin
                 # Identify the nonzero pixels in x and y within the window
                 good_left_inds = ((nonzeroy >= win_y_low) & (nonzeroy < win_y_high) & (nonzerox >= win_xleft_low) & (nonzerox < win_xleft_high)).nonzero()[0]
                 good_right_inds = ((nonzeroy >= win_y_low) & (nonzeroy < win_y_high) & (nonzerox >= win_xright_low) & (nonzerox < win_xright_high)).nonzero()[0]
@@ -195,10 +196,10 @@ class Line():
                 # Identify window boundaries in x and y (and right and left)
                 win_y_low = binary_warped.shape[0] - (window+1)*window_height
                 win_y_high = binary_warped.shape[0] - window*window_height
-                win_xleft_low = leftx_current - self.margin
-                win_xleft_high = leftx_current + self.margin
-                win_xright_low = rightx_current - self.margin
-                win_xright_high = rightx_current + self.margin
+                win_xleft_low = leftx_current - margin
+                win_xleft_high = leftx_current + margin
+                win_xright_low = rightx_current - margin
+                win_xright_high = rightx_current + margin
                 # Identify the nonzero pixels in x and y within the window
                 good_left_inds = ((nonzeroy >= win_y_low) & (nonzeroy < win_y_high) & (nonzerox >= win_xleft_low) & (nonzerox < win_xleft_high)).nonzero()[0]
                 good_right_inds = ((nonzeroy >= win_y_low) & (nonzeroy < win_y_high) & (nonzerox >= win_xright_low) & (nonzerox < win_xright_high)).nonzero()[0]
@@ -229,8 +230,7 @@ class Line():
             left_fit = []
             right_fit = []
         return out_img, left_fit, right_fit, nonzerox, nonzeroy, left_lane_inds, right_lane_inds
-    
-    
+       
     def _image_preprocessing(self, image):
         # image preprocessing
         image = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
@@ -283,7 +283,6 @@ class Line():
             self.best_fit_left = np.mean(self.last_fit_left, axis=0).tolist()
             self.best_fit_right = np.mean(self.last_fit_right, axis=0).tolist()
 
-
     def _get_road_image(self, warped, image):
         ploty = np.linspace(0, warped.shape[0]-1, warped.shape[0] )
         left_fitx  = self.best_fit_left[0]*ploty**2  + self.best_fit_left[1]*ploty  + self.best_fit_left[2]
@@ -307,7 +306,6 @@ class Line():
         result = cv2.addWeighted(image, 1, newwarp, 0.3, 0)
         cv2.putText(result, 'Radius of Curvature :' + str(round(self.radius_of_curvature_left,0)) + "," + str(round(self.radius_of_curvature_right,0)), (30, 60), cv2.FONT_HERSHEY_COMPLEX, 1, (255,0,0), 2)
         cv2.putText(result, 'Distance from Center :' + str(round(self.position,2)) , (30, 90), cv2.FONT_HERSHEY_COMPLEX, 1, (255,0,0), 2)
-        result = cv2.cvtColor(result, cv2.COLOR_BGR2RGB)
         return result
 
     def iter_once(self, image):

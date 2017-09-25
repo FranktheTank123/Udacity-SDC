@@ -89,7 +89,7 @@ I verified that my perspective transform was working as expected by drawing the 
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-Lane lines are detected in the function `detect_lane_lines` in the ipython nobebook. I used the polynomial fit method from the lectures to detect the lane lines.
+Lane lines are detected in the function `detect_lane_lines` in the `./codes/Line.py` line 147-231. I used the polynomial fit method from the lectures to detect the lane lines.
 
 Here are the steps I take for detecting lane lines:
 
@@ -112,7 +112,7 @@ When we process the video, I will save the frame. For the next image, I do a tar
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-Please refer to the `get_radius_of_curvature` function defined the ipython notebook. I simply refer to the codes provided from #35 - Measuring Curvature.
+Please refer to the `get_radius_of_curvature` function defined in the `./codes/Line.py` line 131-145. I simply refer to the codes provided from #35 - Measuring Curvature.
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
