@@ -25,7 +25,8 @@ The goals / steps of this project are the following:
 [image4]: ./output_images/perspective_1.jpg "Warp Example1"
 [image41]: ./output_images/perspective_2.jpg "Warp Example2"
 [image5]: ./examples/color_fit_lines.jpg "Fit Visual"
-[image6]: ./examples/example_output.jpg "Output"
+[image6]: ./output_images/test1.png "Output1"
+[image61]: ./output_images/test2.png "Output2"
 [video1]: ./project_video.mp4 "Video"
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
@@ -107,13 +108,14 @@ When we process the video, I will save the frame. For the next image, I do a tar
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-I did this in lines # through # in my code in `my_other_file.py`
+Please refer to the `get_radius_of_curvature` function defined the ipython notebook. I simply refer to the codes provided from #35 - Measuring Curvature.
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
+I implemented the whole pipeline in the `Line` class in the ipython notebook. Here are examples of my result on a test image:
 
 ![alt text][image6]
+![alt text][image61]
 
 ---
 
@@ -121,7 +123,7 @@ I implemented this step in lines # through # in my code in `yet_another_file.py`
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
 
-Here's a [link to my video result](./project_video.mp4)
+Here's a [link to my video result](./result.mp4).
 
 ---
 
@@ -129,6 +131,10 @@ Here's a [link to my video result](./project_video.mp4)
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further:
 
+* There are too many hand-tuned parameters, which makes the pipeline hard to generalize. For instance, my pipeline did not work on the harder video.
+* The pipeline fails when there are shades, strong lights, curvy road (when part of the road was outside of the region of interest, which makes it difficult to extract the real curvature.), multiple lanes, etc.
+
+In order to make the pipeline more robust, I would recommend to approach the problem from a deep learning way, where the model can utilize all part of the image, which can deal with all situations (like the human does by only seeing the scene from the window/camera).
 
