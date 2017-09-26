@@ -96,7 +96,6 @@ def extract_features_hog(image, cspace='RGB', orient=9, pix_per_cell=8, cell_per
     # Return list of feature vectors
     return features, img_output
 
-
 # Define a function to extract features from a list of images
 def extract_images_features(imgs, **kwargs):
     # Create a list to append feature vectors to
@@ -110,9 +109,7 @@ def extract_images_features(imgs, **kwargs):
     # Return list of feature vectors
     return features
 
-def extract_image_features(img, cspace, spatial_size, hist_nbins, orient, 
-                        pix_per_cell, cell_per_block, hog_channel, 
-                        use_hog=True, use_spatial=True, use_hist=True):   
+def extract_image_features(img, cspace, spatial_size, hist_nbins, orient,  pix_per_cell, cell_per_block, hog_channel, use_hog=True, use_spatial=True, use_hist=True):   
     img_features = []
     if cspace != 'RGB':
         if cspace == 'HSV':
@@ -137,53 +134,34 @@ def extract_image_features(img, cspace, spatial_size, hist_nbins, orient,
         if hog_channel == 'ALL':
             hog_features = []
             for channel in range(feature_image.shape[2]):
-                hog_features.append(get_hog_features(feature_image[:,:,channel], 
+                hog_features.extend(get_hog_features(feature_image[:,:,channel], 
                                     orient, pix_per_cell, cell_per_block, 
                                     vis=False, feature_vec=True))      
         else:
             hog_features = get_hog_features(feature_image[:,:,hog_channel], orient, 
                         pix_per_cell, cell_per_block, vis=False, feature_vec=True)
         img_features.append(hog_features)
+
     return np.concatenate(img_features)
 
 # Define a function you will pass an image 
 # and the list of windows to be searched (output of slide_windows())
-def search_windows(img, windows, clf, scaler, color_space='RGB', 
-                    spatial_size=(32, 32), hist_nbins=32, 
-                    hist_range=(0, 256), orient=9, 
-                    pix_per_cell=8, cell_per_block=2, 
-                    hog_channel=0, spatial_feat=True, 
-                    hist_feat=True, hog_feat=True):
-
-    #1) Create an empty list to receive positive detection windows
+def search_windows(img, windows, clf, scaler, **kwargs):
     on_windows = []
-    #2) Iterate over all windows in the list
     for window in windows:
-        #3) Extract the test window from original image
         test_img = cv2.resize(img[window[0][1]:window[1][1], window[0][0]:window[1][0]], (64, 64))      
-        #4) Extract features for that window using single_img_features()
-        features = single_img_features(test_img, color_space=color_space, 
-                            spatial_size=spatial_size, hist_nbins=hist_nbins, 
-                            orient=orient, pix_per_cell=pix_per_cell, 
-                            cell_per_block=cell_per_block, 
-                            hog_channel=hog_channel, spatial_feat=spatial_feat, 
-                            hist_feat=hist_feat, hog_feat=hog_feat)
-        #5) Scale extracted features to be fed to classifier
+        features = extract_image_features(test_img, **kwargs)
         test_features = scaler.transform(np.array(features).reshape(1, -1))
-        #6) Predict using your classifier
         prediction = clf.predict(test_features)
-        #7) If positive (prediction == 1) then save the window
         if prediction == 1:
             on_windows.append(window)
-    #8) Return windows for positive detections
     return on_windows
         
 # Define a function that takes an image,
 # start and stop positions in both x and y, 
 # window size (x and y dimensions),  
 # and overlap fraction (for both x and y)
-def slide_window(img, x_start_stop=[None, None], y_start_stop=[None, None], 
-                    xy_window=(150, 64), xy_overlap=(0.8, 0.8)):
+def slide_window(img, x_start_stop=[None, None], y_start_stop=[None, None], xy_window=(150, 64), xy_overlap=(0.8, 0.8)):
     # If x and/or y start/stop positions not defined, set to image size
     if x_start_stop[0] == None:
         x_start_stop[0] = 0
@@ -234,7 +212,6 @@ def draw_boxes(img, bboxes, color=(0, 0, 255), thick=6):
     # Return the image copy with boxes drawn
     return imcopy
 
-
 def convert_color(img, conv='RGB2YCrCb'):
     if conv == 'RGB2YCrCb':
         return cv2.cvtColor(img, cv2.COLOR_RGB2YCrCb)
@@ -251,7 +228,7 @@ def add_heat(heatmap, bbox_list):
         heatmap[box[0][1]:box[1][1], box[0][0]:box[1][0]] += 1
 
     # Return updated heatmap
-    return heatmap# Iterate through list of bboxes
+    return heatmap # Iterate through list of bboxes
 
 def apply_threshold(heatmap, threshold):
     cp_heatmap = copy.deepcopy(heatmap)
@@ -276,33 +253,14 @@ def draw_labeled_bboxes(img, labels):
     return img
 
 
-def detect_vehicles(img):
+def find_vehicles(img, svc, X_scaler, **params):
     draw_image = np.copy(img)
     image = img.astype(np.float32)/255
+    windows1 = slide_window(image, x_start_stop=[None, None], y_start_stop=[395, 650], xy_window=(128, 96), xy_overlap=(0.5, 0.5))
+    windows2 = slide_window(image, x_start_stop=[None, None], y_start_stop=[395, 650], xy_window=(96, 96), xy_overlap=(0.8, 0.8))
+    windows3 = slide_window(image, x_start_stop=[None, None], y_start_stop=[395, 650], xy_window=(48, 48), xy_overlap=(0.45, 0.45))
 
-#     y_start_stop = [395, None] # Min and max in y to search in slide_window()
-#     windows1 = slide_window(image, x_start_stop=[None, None], y_start_stop=y_start_stop, 
-#                         xy_window=(128, 128), xy_overlap=(0.75, 0.75))
-
-    y_start_stop = [395, 650] # Min and max in y to search in slide_window()
-    windows2 = slide_window(image, x_start_stop=[None, None], y_start_stop=y_start_stop, 
-                        xy_window=(128, 96), xy_overlap=(0.5, 0.5))
-
-    y_start_stop = [395, 650] # Min and max in y to search in slide_window()
-    windows3 = slide_window(image, x_start_stop=[None, None], y_start_stop=y_start_stop, 
-                        xy_window=(96, 96), xy_overlap=(0.8, 0.8))
-
-    y_start_stop = [395, 550] # Min and max in y to search in slide_window()
-    windows4 = slide_window(image, x_start_stop=[None, None], y_start_stop=y_start_stop, 
-                        xy_window=(48, 48), xy_overlap=(0.45, 0.45))
-    windows = windows2 + windows3 + windows4
-#     windows = windows1 + windows2 + windows3 + windows4
-    hot_windows = search_windows(image, windows, svc, X_scaler, color_space=color_space, 
-                            spatial_size=spatial_size, hist_nbins=hist_nbins, 
-                            orient=orient, pix_per_cell=pix_per_cell, 
-                            cell_per_block=cell_per_block, 
-                            hog_channel=hog_channel, spatial_feat=spatial_feat, 
-                            hist_feat=hist_feat, hog_feat=hog_feat)                       
-
+    windows = windows1 + windows2 + windows3 # concat
+    hot_windows = search_windows(image, windows, svc, X_scaler, **params)
     window_img = draw_boxes(draw_image, hot_windows, color=(0, 0, 255), thick=6)                    
-    return window_img, hot_windows, windows2, windows3, windows4
+    return window_img, hot_windows, (windows1, windows2, windows3)

@@ -23,6 +23,7 @@ The goals / steps of this project are the following:
 [image3]: ./output_images/grid1.png
 [image31]: ./output_images/grid2.png
 [image32]: ./output_images/grid3.png
+[image33]: ./output_images/grid4.png
 [image4]: ./output_images/test_0_out.png
 [image41]: ./output_images/test_1_out.png
 [image42]: ./output_images/test_2_out.png
@@ -30,7 +31,14 @@ The goals / steps of this project are the following:
 [image44]: ./output_images/test_4_out.png
 [image45]: ./output_images/test_5_out.png
 
-[image5]: ./output_images/bboxes_and_heat.png
+[image5]: ./output_images/frame1.png
+[image51]: ./output_images/frame2.png
+[image52]: ./output_images/frame3.png
+[image53]: ./output_images/frame4.png
+[image54]: ./output_images/frame5.png
+[image55]: ./output_images/frame6.png
+
+
 [image6]: ./output_images/labels_map.png
 [image7]: ./output_images/output_bboxes.png
 [video1]: ./project_video.mp4
@@ -106,6 +114,7 @@ To be brief, I use 3 different sizes sliding window search (ref `slide_window` f
 ![alt text][image3]
 ![alt text][image31]
 ![alt text][image32]
+![alt text][image33]
 
 I then feed there 3 different sized windows into the `search_windows` function, together with the pre-trained `svc` and `x_scaler`:
 
@@ -134,7 +143,7 @@ Ultimately I searched on three scales using YCrCb 3-channel HOG features plus sp
 ### Video Implementation
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (somewhat wobbly or unstable bounding boxes are ok as long as you are identifying the vehicles most of the time with minimal false positives.)
-Here's a [link to my video result](./project_video.mp4)
+Here's a [link to my video result](./result.mp4)
 
 
 #### 2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
@@ -143,17 +152,12 @@ I recorded the positions of positive detections in each frame of the video.  Fro
 
 Here's an example result showing the heatmap from a series of frames of video, the result of `scipy.ndimage.measurements.label()` and the bounding boxes then overlaid on the last frame of video:
 
-### Here are six frames and their corresponding heatmaps:
-
 ![alt text][image5]
-
-### Here is the output of `scipy.ndimage.measurements.label()` on the integrated heatmap from all six frames:
-![alt text][image6]
-
-### Here the resulting bounding boxes are drawn onto the last frame in the series:
-![alt text][image7]
-
-
+![alt text][image51]
+![alt text][image52]
+![alt text][image53]
+![alt text][image54]
+![alt text][image55]
 
 ---
 
@@ -164,4 +168,5 @@ Here's an example result showing the heatmap from a series of frames of video, t
 Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
 
 * It takes 2+ hours to process the <1 min video. This cannot be done in real time, which is somehow useless. I would recommend using **Faster-RCNN** for real time object detection (e.g. [YOLO](https://pjreddie.com/darknet/yolo/)).
+* 
 
