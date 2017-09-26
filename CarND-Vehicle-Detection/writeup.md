@@ -167,6 +167,9 @@ Here's an example result showing the heatmap from a series of frames of video, t
 
 Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
 
+* The grid search is very inefficient as there are too many duplication happening.
+* There are many hard-coded parameters, such as HOG, histogram and spatial feature extractions.
+* We have to pre-specify where to slide windows. This should be generalized during uphill/downhill, where the `y_start_stop` might vary. One solution is to window search a wider range, which will cause more time.
 * It takes 2+ hours to process the <1 min video. This cannot be done in real time, which is somehow useless. I would recommend using **Faster-RCNN** for real time object detection (e.g. [YOLO](https://pjreddie.com/darknet/yolo/)).
-* 
+ 
 
