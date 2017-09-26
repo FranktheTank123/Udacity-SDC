@@ -15,13 +15,20 @@ The goals / steps of this project are the following:
 * Estimate a bounding box for vehicles detected.
 
 [//]: # (Image References)
-[image1]: ./examples/car_not_car.png
-[image2]: ./examples/HOG_example.jpg
-[image3]: ./examples/sliding_windows.jpg
-[image4]: ./examples/sliding_window.jpg
-[image5]: ./examples/bboxes_and_heat.png
-[image6]: ./examples/labels_map.png
-[image7]: ./examples/output_bboxes.png
+[image1]: ./output_images/non-vehicle.png
+[image11]: ./output_images/vehicle.png
+[image2]: ./output_images/car_hog_0.png
+[image21]: ./output_images/car_hog_1.png
+[image22]: ./output_images/car_hog_2.png
+[image23]: ./output_images/notcar_hog_0.png
+[image24]: ./output_images/notcar_hog_1.png
+[image25]: ./output_images/notcar_hog_2.png
+
+[image3]: ./output_images/sliding_windows.jpg
+[image4]: ./output_images/sliding_window.jpg
+[image5]: ./output_images/bboxes_and_heat.png
+[image6]: ./output_images/labels_map.png
+[image7]: ./output_images/output_bboxes.png
 [video1]: ./project_video.mp4
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/513/view) Points
@@ -43,13 +50,20 @@ The code for this step is contained in the first code cell of the IPython notebo
 I started by reading in all the `vehicle` and `non-vehicle` images.  Here is an example of one of each of the `vehicle` and `non-vehicle` classes:
 
 ![alt text][image1]
+![alt text][image11]
 
 I then explored different color spaces and different `skimage.hog()` parameters (`orientations`, `pixels_per_cell`, and `cells_per_block`).  I grabbed random images from each of the two classes and displayed them to get a feel for what the `skimage.hog()` output looks like.
 
-Here is an example using the `YCrCb` color space and HOG parameters of `orientations=8`, `pixels_per_cell=(8, 8)` and `cells_per_block=(2, 2)`:
+Here is an example using the `YCrCb` color space and HOG parameters of `orientations=8`, `pixels_per_cell=(8, 8)` and `cells_per_block=(2, 2)` on a car image and a non-car image:
 
 
 ![alt text][image2]
+![alt text][image21]
+![alt text][image22]
+![alt text][image23]
+![alt text][image24]
+![alt text][image25]
+
 
 #### 2. Explain how you settled on your final choice of HOG parameters.
 
@@ -105,4 +119,6 @@ Here's an example result showing the heatmap from a series of frames of video, t
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
 Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+
+* It takes 2+ hours to process the <1 min video. This cannot be done in real time, which is somehow useless. I would recommend using **Faster-RCNN** for real time object detection (e.g. [YOLO](https://pjreddie.com/darknet/yolo/)).
 
