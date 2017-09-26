@@ -45,7 +45,7 @@ You're reading it!
 
 #### 1. Explain how (and identify where in your code) you extracted HOG features from the training images.
 
-The code for this step is contained in the first code cell of the IPython notebook (or in lines # through # of the file called `some_file.py`).  
+The code for this step is contained in the IPython notebook and function `extract_features_hog` in the file called `./codes/helper.py`.  
 
 I started by reading in all the `vehicle` and `non-vehicle` images.  Here is an example of one of each of the `vehicle` and `non-vehicle` classes:
 
@@ -55,7 +55,6 @@ I started by reading in all the `vehicle` and `non-vehicle` images.  Here is an 
 I then explored different color spaces and different `skimage.hog()` parameters (`orientations`, `pixels_per_cell`, and `cells_per_block`).  I grabbed random images from each of the two classes and displayed them to get a feel for what the `skimage.hog()` output looks like.
 
 Here is an example using the `YCrCb` color space and HOG parameters of `orientations=8`, `pixels_per_cell=(8, 8)` and `cells_per_block=(2, 2)` on a car image and a non-car image:
-
 
 ![alt text][image2]
 ![alt text][image21]
@@ -67,11 +66,25 @@ Here is an example using the `YCrCb` color space and HOG parameters of `orientat
 
 #### 2. Explain how you settled on your final choice of HOG parameters.
 
-I tried various combinations of parameters and...
+I tried various combinations of parameters and many of the results are very close to each other. Please refer to the ipython notebook for the full grid searched HOG pictures.
+
+Finally I decided to use
+
+* cspace = `YCrCb`
+* Orient = 9
+* Pix_per_cell = 8
+* Cell_per_block = 2
+* hog_channel = `ALL`
 
 #### 3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
 
-I trained a linear SVM using...
+I trained a linear SVC using default parameters.
+
+For feature extraction, please refer to the `extract_image_features` function in the `./codes/helper.py` file. This function gives the option to extract any of the three features:
+
+* HOG features using `get_hog_features`
+* Histogram features using `color_hist`
+* Spatial feature using `bin_spatial`
 
 ### Sliding Window Search
 
