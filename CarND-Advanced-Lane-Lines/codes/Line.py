@@ -45,36 +45,35 @@ def warper(img, src, dst):
     return warped
 
 def lines_sanity_check(lens, left_fit, right_fit, left_curverad, right_curverad):
+
     """Make sure curves are reasonable."""
-    try:
-        dist_thresh = (650, 750)    # Distance of left and right lane in pixels
-        roc_max_thresh = 10000      # Threshold for straight lines
-        roc_diff_thresh = (0, 1000) # Threshold for curved lines
+    dist_thresh = (500, 1000)    # Distance of left and right lane in pixels
+    roc_max_thresh = 10000      # Threshold for straight lines
+    roc_diff_thresh = (0, 30000) # Threshold for curved lines
 
-        # Distance Check
-        left = left_fit[0]*lens**2 + left_fit[1]*lens + left_fit[2]
-        right = right_fit[0]*lens**2 + right_fit[1]*lens + right_fit[2]
-        base_diff = np.abs(left - right)
-        base_diff_check = (base_diff > dist_thresh[0]) & (base_diff < dist_thresh[1])
-        
-        # ROC check
-        roc_diff = np.abs(right_curverad - left_curverad)
-        roc_max_check = (left_curverad > roc_max_thresh) | (right_curverad > roc_max_thresh)
-        roc_diff_check = (roc_diff > roc_diff_thresh[0]) & (roc_diff < roc_diff_thresh[1])
-        roc_check = roc_max_check | roc_diff_check
+    # Distance Check
+    left = left_fit[0]*lens**2 + left_fit[1]*lens + left_fit[2]
+    right = right_fit[0]*lens**2 + right_fit[1]*lens + right_fit[2]
+    base_diff = np.abs(left - right)
+    base_diff_check = (base_diff > dist_thresh[0]) & (base_diff < dist_thresh[1])
+    
+    # ROC check
+    roc_diff = np.abs(right_curverad - left_curverad)
+    roc_max_check = (left_curverad > roc_max_thresh) | (right_curverad > roc_max_thresh)
+    roc_diff_check = (roc_diff > roc_diff_thresh[0]) & (roc_diff < roc_diff_thresh[1])
+    roc_check = roc_max_check | roc_diff_check
 
-        # Parallel Check. Checking if they are of same sign or not
-        coeff1_sign = left_fit[0]*right_fit[0]
-        coeff2_sign = left_fit[1]*right_fit[1]
-        parallel_check = (coeff1_sign > 0) & (coeff2_sign > 0) 
+    # Parallel Check. Checking if they are of same sign or not
+    coeff1_sign = left_fit[0]*right_fit[0]
+    coeff2_sign = left_fit[1]*right_fit[1]
+    parallel_check = (coeff1_sign > 0) & (coeff2_sign > 0) 
 
-        # Assersion
-        if base_diff_check and roc_check and parallel_check:
-            return True
-        else:
-            return False  
-    except:
-        return False
+    # Assersion
+    if base_diff_check and roc_check and parallel_check:
+        return True
+    else:
+        return False  
+
 
 
 class Line():
@@ -136,11 +135,14 @@ class Line():
         rightx = nonzerox[right_lane_inds]
         righty = nonzeroy[right_lane_inds] 
 
-        left_fit = np.polyfit(lefty*ym_per_pix, leftx*xm_per_pix, 2)
-        right_fit = np.polyfit(righty*ym_per_pix, rightx*xm_per_pix, 2)
 
-        left_curverad = ((1 + (2*left_fit[0]*self.shape[0] + left_fit[1])**2)**1.5) / np.absolute(2*left_fit[0])
-        right_curverad = ((1 + (2*right_fit[0]*self.shape[0] + right_fit[1])**2)**1.5) / np.absolute(2*right_fit[0])
+        y_eval = self.shape[0]
+
+        left_fit_cr = np.polyfit(lefty*ym_per_pix, leftx*xm_per_pix, 2)
+        right_fit_cr = np.polyfit(righty*ym_per_pix, rightx*xm_per_pix, 2)
+
+        left_curverad = ((1 + (2*left_fit_cr[0]*y_eval*ym_per_pix + left_fit_cr[1])**2)**1.5) / np.absolute(2*left_fit_cr[0])
+        right_curverad = ((1 + (2*right_fit_cr[0]*y_eval*ym_per_pix + right_fit_cr[1])**2)**1.5) / np.absolute(2*right_fit_cr[0])
 
         return left_curverad, right_curverad
     
@@ -238,7 +240,7 @@ class Line():
         image = cv2.undistort(image, self.mtx, self.dist, None, self.mtx)
         pipeline_result, final_result = pipeline(image)                  # gradient thresholding
         warped = warper(final_result, self.SRC_COORDS, self.DEST_COORDS) # perspective transform
-        return warped
+        return warped, image
 
     def _calc_dist_from_center(self):
         # meters from center
@@ -306,12 +308,14 @@ class Line():
         result = cv2.addWeighted(image, 1, newwarp, 0.3, 0)
         cv2.putText(result, 'Radius of Curvature :' + str(round(self.radius_of_curvature_left,0)) + "," + str(round(self.radius_of_curvature_right,0)), (30, 60), cv2.FONT_HERSHEY_COMPLEX, 1, (255,0,0), 2)
         cv2.putText(result, 'Distance from Center :' + str(round(self.position,2)) , (30, 90), cv2.FONT_HERSHEY_COMPLEX, 1, (255,0,0), 2)
+        result = cv2.cvtColor(result,cv2.COLOR_BGR2RGB)
         return result
 
     def iter_once(self, image):
-        warped = self._image_preprocessing(image)
+        warped, image = self._image_preprocessing(image)
 
         out_img, left_fit, right_fit, nonzerox, nonzeroy, left_lane_inds, right_lane_inds = self.detect_lane_lines(warped, self.detected)
+        # leftcurverad, rightcurverad = self.get_radius_of_curvature(nonzerox, nonzeroy, left_lane_inds, right_lane_inds, left_fit, right_fit)
         try:
             leftcurverad, rightcurverad = self.get_radius_of_curvature(nonzerox, nonzeroy, left_lane_inds, right_lane_inds, left_fit, right_fit)
             sanity_check = lines_sanity_check(self.shape[0]-1, left_fit, right_fit, leftcurverad, rightcurverad)
