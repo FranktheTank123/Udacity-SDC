@@ -1,7 +1,4 @@
 ## Writeup
-### You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
-
----
 
 **Vehicle Detection Project**
 
@@ -23,9 +20,16 @@ The goals / steps of this project are the following:
 [image23]: ./output_images/notcar_hog_0.png
 [image24]: ./output_images/notcar_hog_1.png
 [image25]: ./output_images/notcar_hog_2.png
+[image3]: ./output_images/grid1.png
+[image31]: ./output_images/grid2.png
+[image32]: ./output_images/grid3.png
+[image4]: ./output_images/test_0_out.png
+[image41]: ./output_images/test_1_out.png
+[image42]: ./output_images/test_2_out.png
+[image43]: ./output_images/test_3_out.png
+[image44]: ./output_images/test_4_out.png
+[image45]: ./output_images/test_5_out.png
 
-[image3]: ./output_images/sliding_windows.jpg
-[image4]: ./output_images/sliding_window.jpg
 [image5]: ./output_images/bboxes_and_heat.png
 [image6]: ./output_images/labels_map.png
 [image7]: ./output_images/output_bboxes.png
@@ -78,7 +82,7 @@ Finally I decided to use
 
 #### 3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
 
-I trained a linear SVC using default parameters.
+I trained a linear SVC using default parameters. Without tuning any parameters, the testing accuracy was 98.9%, which is amazing.
 
 For feature extraction, please refer to the `extract_image_features` function in the `./codes/helper.py` file. This function gives the option to extract any of the three features:
 
@@ -90,15 +94,41 @@ For feature extraction, please refer to the `extract_image_features` function in
 
 #### 1. Describe how (and identify where in your code) you implemented a sliding window search.  How did you decide what scales to search and how much to overlap windows?
 
-I decided to search random window positions at random scales all over the image and came up with this (ok just kidding I didn't actually ;):
+Please refer to the `find_vehicles` function in the `./codes/helper.py` file. 
+
+To be brief, I use 3 different sizes sliding window search (ref `slide_window` function), with:
+
+* x_start_stop: `[None, None]`,  `[None, None]`,  `[None, None]`
+* y_start_stop: `[395, 650]`, `[395, 650]`, `[395, 650]`
+* xy_window: `(128, 96)`, `(96, 96)`, `(48, 48)`
+* xy_overlap: `(0.5, 0.5)`, `(0.8, 0.8)`, `(0.45, 0.45)`
 
 ![alt text][image3]
+![alt text][image31]
+![alt text][image32]
+
+I then feed there 3 different sized windows into the `search_windows` function, together with the pre-trained `svc` and `x_scaler`:
+
+1. Iterate over all windows
+2. Extract the test window from original image & resize
+3. Extract features for that window using `extract_image_features`
+4. Scale extracted features to be fed to classifier
+5. Predict using SVC
+6. If prediction == 1, append this window to the results
+
+Finally, I drew there "hot" windows onto the image and return.
 
 #### 2. Show some examples of test images to demonstrate how your pipeline is working.  What did you do to optimize the performance of your classifier?
 
-Ultimately I searched on two scales using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which provided a nice result.  Here are some example images:
+Ultimately I searched on three scales using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which provided a nice result. Here are some example images:
 
 ![alt text][image4]
+![alt text][image41]
+![alt text][image42]
+![alt text][image43]
+![alt text][image44]
+![alt text][image45]
+
 ---
 
 ### Video Implementation
