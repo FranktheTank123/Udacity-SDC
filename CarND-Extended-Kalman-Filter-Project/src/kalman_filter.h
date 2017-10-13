@@ -23,6 +23,11 @@ public:
   // measurement covariance matrix
   Eigen::MatrixXd R_;
 
+  Eigen::VectorXd hx_;
+
+  // H jaconbian covariance matrix
+    Eigen::MatrixXd Hj_;
+
   /**
    * Constructor
    */
