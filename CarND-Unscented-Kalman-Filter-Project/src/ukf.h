@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include "tools.h"
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
@@ -25,11 +26,42 @@ public:
   ///* state vector: [pos1 pos2 vel_abs yaw_angle yaw_rate] in SI units and rad
   VectorXd x_;
 
+  // thing
+  VectorXd hx_;
+
   ///* state covariance matrix
   MatrixXd P_;
 
+  // process covariance matrix
+  MatrixXd Q_;
+
+  // state transition matrix
+  MatrixXd F_;
+
+  // sigma point matrix
+  MatrixXd Xsig_;
+
+  // augmented sigma point matrix
+  MatrixXd Xsig_aug_;
+
   ///* predicted sigma points matrix
   MatrixXd Xsig_pred_;
+
+  // incoming radar measurement
+  VectorXd z_;
+
+  // mean predicted measurement
+  VectorXd z_pred_;
+
+  //sigma points in measurement space
+  MatrixXd Zsig_;
+
+  // predicted measurement covariance
+  MatrixXd S_;
+
+  MatrixXd R_laser_;
+
+  MatrixXd R_radar_;
 
   ///* time when the state is true, in us
   long long time_us_;
@@ -64,9 +96,22 @@ public:
   ///* Augmented state dimension
   int n_aug_;
 
+  // Number of sigma points
+  int n_sig_;
+
   ///* Sigma point spreading parameter
   double lambda_;
 
+  ///* the current NIS for radar
+  double NIS_radar_;
+
+  ///* the current NIS for laser
+  double NIS_laser_;
+
+  // previous timestamp (Added)
+  long previous_timestamp_;
+
+  int step_;
 
   /**
    * Constructor
@@ -102,6 +147,18 @@ public:
    * @param meas_package The measurement at k+1
    */
   void UpdateRadar(MeasurementPackage meas_package);
+
+  void AugmentedSigmaPoints();
+
+  void PredictSigmaPoints(double delta_t);
+
+  void PredictMeanAndCovariance();
+
+  void PredictRadarMeasurement();
+
+  void PredictLidarMeasurement();
+
+  void UpdateState(int n_z, bool is_radar);
 };
 
 #endif /* UKF_H */
