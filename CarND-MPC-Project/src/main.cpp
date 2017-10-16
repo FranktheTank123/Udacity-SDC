@@ -126,7 +126,7 @@ int main() {
           double psi_ = - v * delta / Lf * latency;
           double v_ = v + prev_a * latency;
           double cte_ = cte + v * CppAD::sin(epsi) * latency;
-          double epsi_ = epsi + predicted_psi;
+          double epsi_ = epsi + psi_;
 
           Eigen::VectorXd state(6);
           state << x_, y_, psi_, v_, cte_, epsi_;
