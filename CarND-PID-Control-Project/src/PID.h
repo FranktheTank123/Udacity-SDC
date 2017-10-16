@@ -10,9 +10,10 @@ public:
   double i_error;
   double d_error;
 
+  double sum_cte, prev_cte;
   /*
   * Coefficients
-  */ 
+  */
   double Kp;
   double Ki;
   double Kd;
