@@ -106,7 +106,7 @@ class DBWNode(object):
 
 
     # Helper for subscriber below.
-     def twist_cmd(self, msg):
+    def twist_cmd_cb(self, msg):
          """Subscribe to twist_cmd."""
          self.twist_cmd = msg
 

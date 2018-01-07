@@ -65,10 +65,10 @@ class WaypointUpdater(object):
         lane.waypoints = self.waypoints_to_publish
         self.final_waypoints_pub.publish(lane)
 
-    def waypoints_cb(self, msg):
+    def waypoints_cb(self, waypoints):
         """Collect waypoints and record waypoints lenght."""
-        self.waypoints = msg.waypoints
-        self.waypoints_len = len(self.waypoint)
+        self.waypoints = waypoints
+        self.waypoints_len = len(self.waypoints.waypoints)
         self.lookahead_wps = min(LOOKAHEAD_WPS, self.waypoints_len // 2)
         # add more later
 
